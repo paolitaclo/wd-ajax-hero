@@ -58,22 +58,27 @@
 
   $('.search-btn').on('click', function (event) {
     event.preventDefault();
-    let objMovie = {};
     let title = $('#search').val();
-    let url = `http://www.omdbapi.com/?t=${title}&i=&y=&plot=short&r=json`;
+    let url = `http://www.omdbapi.com/?s=${title}&i=&y=&plot=short&r=json`;
     let fetchResult = fetch(url);
     fetchResult.then(function(res){
       return res.json();
     }).
     then(function (result) {
-      objMovie.id = result.imdbID;
-      objMovie.poster = result.Poster;
-      objMovie.title = result.Title;
-      objMovie.year = result.Released;
-      console.log(objMovie);
-      movies.push(objMovie);
+      var listOfMovies = result.Search.map(function(eachMovie){
+        let objMovie = {
+          id: eachMovie.imdbID,
+          poster: eachMovie.Poster,
+          title: eachMovie.Title,
+          year: eachMovie.Year
+        }
+        return objMovie;
+      });
+      for (var i = 0; i < listOfMovies.length; i++) {
+        movies.push(listOfMovies[i]);
+      }
       renderMovies();
     });
-    movies.splice(0,1);
+    movies.splice(0);
   })
 })();
