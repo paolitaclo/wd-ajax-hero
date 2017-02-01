@@ -56,5 +56,24 @@
     }
   };
 
-  // ADD YOUR CODE HERE
+  $('.search-btn').on('click', function (event) {
+    event.preventDefault();
+    let objMovie = {};
+    let title = $('#search').val();
+    let url = `http://www.omdbapi.com/?t=${title}&i=&y=&plot=short&r=json`;
+    let fetchResult = fetch(url);
+    fetchResult.then(function(res){
+      return res.json();
+    }).
+    then(function (result) {
+      objMovie.id = result.imdbID;
+      objMovie.poster = result.Poster;
+      objMovie.title = result.Title;
+      objMovie.year = result.Released;
+      console.log(objMovie);
+      movies.push(objMovie);
+      renderMovies();
+    });
+    movies.splice(0,1);
+  })
 })();
